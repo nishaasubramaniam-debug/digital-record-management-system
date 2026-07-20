@@ -2,6 +2,7 @@ const logActivity = require("../utils/activityLogger");
 const Document = require("../models/Document");
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 // Upload Document
 const uploadDocument = async (req, res) => {
@@ -334,14 +335,125 @@ const getStorageUsage = async (req, res) => {  try {
   }
 };
 
+const getRecentDocuments = async (req, res) => {
+  try {
+    const documents = await Document.find({
+      uploadedBy: req.user.id,
+    })
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    res.status(200).json(documents);
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+}; 
+
+// Generate Share Link
+const generateShareLink = async (req, res) => {
+  console.log("===== SHARE ROUTE CALLED =====");
+  console.log("Document ID:", req.params.id);
+
+  try {
+    const document = await Document.findById(req.params.id);
+
+    if (!document) {
+      console.log("Document not found in database");
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    // Generate token only once
+    if (!document.shareToken) {
+      document.shareToken = crypto.randomBytes(16).toString("hex");
+      await document.save();
+    }
+
+    res.status(200).json({
+      shareLink: `http://localhost:3000/shared/${document.shareToken}`,
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+// Get Shared Document
+const getSharedDocument = async (req, res) => {
+  try {
+    console.log("Token received:", req.params.token);
+
+    const document = await Document.findOne({
+      shareToken: req.params.token,
+    });
+
+    console.log("Document found:", document);
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    res.status(200).json(document);
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+// Public Download by Share Token
+const downloadSharedDocument = async (req, res) => {
+  try {
+    const document = await Document.findOne({
+      shareToken: req.params.token,
+    });
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    const filePath = path.resolve(document.filePath);
+
+    res.download(filePath, document.fileName);
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadDocument,
   getDocuments,
   deleteDocument,
   updateDocument,
   downloadDocument,
+  downloadSharedDocument,
   toggleFavorite,
   searchDocuments,
   getDashboardStats,
   getStorageUsage,
+  getRecentDocuments,
+  generateShareLink,
+  getSharedDocument,
 };

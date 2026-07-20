@@ -36,6 +36,10 @@ const documentSchema = new mongoose.Schema(
   type: Boolean,
   default: false,
 },
+    shareToken: {
+  type: String,
+  default: null,
+},
   },
   {
     timestamps: true,

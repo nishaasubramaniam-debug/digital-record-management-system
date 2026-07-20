@@ -12,10 +12,14 @@ const {
   deleteDocument,
   updateDocument,
   downloadDocument,
+  downloadSharedDocument,
   toggleFavorite,
   searchDocuments,
   getDashboardStats,
   getStorageUsage,
+  getRecentDocuments,
+  generateShareLink,
+  getSharedDocument,
 } = require("../controllers/documentController");
 
 
@@ -39,6 +43,8 @@ router.get("/storage",
   auth,
   getStorageUsage
 );
+
+router.get("/recent", auth, getRecentDocuments);
 
 // Get All Documents
 router.get(
@@ -67,6 +73,15 @@ router.get(
   "/download/:id",
   auth,
   downloadDocument
+);
+
+router.get("/share/:id", auth, generateShareLink);
+
+router.get("/shared/:token", getSharedDocument);
+
+router.get(
+  "/shared/download/:token",
+  downloadSharedDocument
 );
 
 // Toggle Favorite
