@@ -3,7 +3,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 
+// =======================
 // Register User
+// =======================
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -16,9 +18,7 @@ exports.register = async (req, res) => {
       });
     }
 
-
     const hashedPassword = await bcrypt.hash(password, 10);
-
 
     const user = await User.create({
       name,
@@ -26,12 +26,10 @@ exports.register = async (req, res) => {
       password: hashedPassword,
     });
 
-
     res.status(201).json({
       message: "User registered successfully",
       user,
     });
-
 
   } catch (error) {
     res.status(500).json({
@@ -41,17 +39,16 @@ exports.register = async (req, res) => {
 };
 
 
-
+// =======================
 // Login User
+// =======================
 exports.login = async (req, res) => {
 
   try {
 
     const { email, password } = req.body;
 
-
     const user = await User.findOne({ email });
-
 
     if (!user) {
       return res.status(400).json({
@@ -59,12 +56,10 @@ exports.login = async (req, res) => {
       });
     }
 
-
     const isMatch = await bcrypt.compare(
       password,
       user.password
     );
-
 
     if (!isMatch) {
       return res.status(400).json({
@@ -72,31 +67,61 @@ exports.login = async (req, res) => {
       });
     }
 
-
     const token = jwt.sign(
       {
-        id:user._id
+        id: user._id
       },
       process.env.JWT_SECRET,
       {
-        expiresIn:"1d"
+        expiresIn: "1d"
       }
     );
 
-
     res.json({
-      message:"Login successful",
+      message: "Login successful",
       token,
       user
     });
 
-
-  } catch(error){
+  } catch (error) {
 
     res.status(500).json({
-      message:error.message
+      message: error.message
     });
 
   }
 
+};
+
+
+// =======================
+// Update Profile
+// =======================
+exports.updateProfile = async (req, res) => {
+  try {
+
+    const user = await User.findById(req.user.id);
+
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+
+    await user.save();
+
+    await logActivity(
+  req.user.id,
+  "Updated Profile"
+);
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };

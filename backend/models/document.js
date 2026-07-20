@@ -22,10 +22,20 @@ const documentSchema = new mongoose.Schema(
       required: true,
     },
 
+    fileSize: {
+      type: Number,
+      default: 0,
+  },
+
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
     },
+    
+    isFavorite: {
+  type: Boolean,
+  default: false,
+},
   },
   {
     timestamps: true,

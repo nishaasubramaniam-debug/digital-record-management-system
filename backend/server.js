@@ -1,3 +1,4 @@
+const activityRoutes = require("./routes/activityRoutes");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -34,6 +35,8 @@ connectDB();
 app.use("/api/auth", authRoutes);
 
 app.use("/api/documents", documentRoutes);
+
+app.use("/api/activity", activityRoutes);
 
 
 // Home Route
