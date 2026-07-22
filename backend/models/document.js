@@ -12,6 +12,12 @@ const documentSchema = new mongoose.Schema(
       required: true,
     },
 
+    folder: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Folder",
+      default: null,
+    },
+
     fileName: {
       type: String,
       required: true,
@@ -36,6 +42,12 @@ const documentSchema = new mongoose.Schema(
   type: Boolean,
   default: false,
 },
+
+  isDeleted: {
+  type: Boolean,
+  default: false,
+},
+
     shareToken: {
   type: String,
   default: null,

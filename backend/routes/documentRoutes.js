@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
+console.log("✅ documentRoutes Loaded");
+
 const upload = require("../middleware/upload");
 
 const auth = require("../middleware/auth");
@@ -20,6 +22,11 @@ const {
   getRecentDocuments,
   generateShareLink,
   getSharedDocument,
+  getDocumentsByFolder,
+  getRecycleBin,
+  restoreDocument,
+  deleteForever,
+  emptyRecycleBin,
 } = require("../controllers/documentController");
 
 
@@ -45,6 +52,12 @@ router.get("/storage",
 );
 
 router.get("/recent", auth, getRecentDocuments);
+
+router.get(
+  "/folder/:folderId",
+  auth,
+  getDocumentsByFolder
+);
 
 // Get All Documents
 router.get(
@@ -91,7 +104,34 @@ router.put(
   toggleFavorite
 );
 
-// Delete Document
+// Recycle Bin
+console.log("✅ Recycle Bin Route Registered");
+// Recycle Bin
+router.get(
+  "/recycle-bin",
+  auth,
+  getRecycleBin
+);
+
+router.put(
+  "/restore/:id",
+  auth,
+  restoreDocument
+);
+
+router.delete(
+  "/delete-forever/:id",
+  auth,
+  deleteForever
+);
+
+router.delete(
+  "/empty-recycle-bin",
+  auth,
+  emptyRecycleBin
+);
+
+// Delete Document (KEEP THIS LAST)
 router.delete(
   "/:id",
   auth,

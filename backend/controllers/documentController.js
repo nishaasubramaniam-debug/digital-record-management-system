@@ -12,8 +12,7 @@ const uploadDocument = async (req, res) => {
         console.log("Body:", req.body);
         console.log("File:", req.file);
 
-        const { title, category } = req.body;
-
+        const { title, category, folder } = req.body;
         if (!req.file) {
             return res.status(400).json({
                 message: "Please upload a file"
@@ -21,13 +20,14 @@ const uploadDocument = async (req, res) => {
         }
 
         const document = await Document.create({
-            title,
-            category,
-            fileName: req.file.filename,
-            filePath: req.file.path,
-            fileSize: req.file.size,
-            uploadedBy: req.user.id
-        });
+    title,
+    category,
+    folder: folder || null,
+    fileName: req.file.filename,
+    filePath: req.file.path,
+    fileSize: req.file.size,
+    uploadedBy: req.user.id,
+});
 
         res.status(201).json({
             message: "Document uploaded successfully",
@@ -51,11 +51,17 @@ const getDocuments = async (req, res) => {
     try {
 
        const documents = await Document.find({
-            uploadedBy: req.user.id
-        }).sort({
-            createdAt: -1
-        });
-
+  uploadedBy: req.user.id,
+  $or: [
+    { isDeleted: false },
+    { isDeleted: { $exists: false } },
+  ],
+})
+.populate("folder", "name")
+.sort({
+  createdAt: -1,
+});
+        console.log("Documents:", JSON.stringify(documents, null, 2));
         res.status(200).json(documents);
 
     } catch (error) {
@@ -110,52 +116,44 @@ const toggleFavorite = async (req, res) => {
   }
 };
 
-// Delete Document
+// Move Document to Recycle Bin
 const deleteDocument = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
 
-    try {
-
-        const document = await Document.findById(req.params.id);
-
-        if (!document) {
-            return res.status(404).json({
-                message: "Document not found"
-            });
-        }
-
-        await logActivity(
-  req.user.id,
-  "Deleted Document",
-  document.title
-);
-
-        const filePath = path.join(
-            __dirname,
-            "..",
-            document.filePath
-        );
-
-        if (fs.existsSync(filePath)) {
-            fs.unlinkSync(filePath);
-        }
-
-        await Document.findByIdAndDelete(req.params.id);
-
-        res.status(200).json({
-            message: "Document deleted successfully"
-        });
-
-    } catch (error) {
-
-        console.log(error);
-
-        res.status(500).json({
-            message: error.message
-        });
-
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
     }
 
+    document.isDeleted = true;
+
+console.log("Before Save:", document.isDeleted);
+
+await document.save();
+
+console.log("After Save:", document);
+
+    await logActivity(
+      req.user.id,
+      "Moved to Recycle Bin",
+      document.title
+    );
+
+    res.status(200).json({
+      message: "Document moved to Recycle Bin successfully",
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
+
 // Update Document
 const updateDocument = async (req, res) => {
   try {
@@ -277,45 +275,45 @@ const searchDocuments = async (req, res) => {
 // ==============================
 
 const getDashboardStats = async (req, res) => {
+  try {
+    const totalDocuments = await Document.countDocuments({
+      uploadedBy: req.user.id,
+      $or: [
+        { isDeleted: false },
+        { isDeleted: { $exists: false } },
+      ],
+    });
 
-    try {
+    console.log("Dashboard Total Documents:", totalDocuments);
 
-        const totalDocuments = await Document.countDocuments({
-            uploadedBy: req.user.id
-        });
+    const categories = await Document.distinct("category", {
+      uploadedBy: req.user.id,
+      $or: [
+        { isDeleted: false },
+        { isDeleted: { $exists: false } },
+      ],
+    });
 
-        const categories = await Document.distinct(
-            "category",
-            {
-                uploadedBy: req.user.id
-            }
-        );
+    res.status(200).json({
+      totalDocuments,
+      totalCategories: categories.length,
+    });
 
-        res.status(200).json({
+  } catch (error) {
+    console.log(error);
 
-            totalDocuments,
-
-            totalCategories: categories.length
-
-        });
-
-    } catch (error) {
-
-        console.log(error);
-
-        res.status(500).json({
-            message: error.message
-        });
-
-    }
-
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 const getStorageUsage = async (req, res) => {  try {
 
     const documents = await Document.find({
-      uploadedBy: req.user.id,
-    });
+  uploadedBy: req.user.id,
+  isDeleted: false,
+});
 
     let totalSize = 0;
 
@@ -338,10 +336,11 @@ const getStorageUsage = async (req, res) => {  try {
 const getRecentDocuments = async (req, res) => {
   try {
     const documents = await Document.find({
-      uploadedBy: req.user.id,
-    })
-      .sort({ createdAt: -1 })
-      .limit(5);
+  uploadedBy: req.user.id,
+  isDeleted: false,
+})
+.sort({ createdAt: -1 })
+.limit(5);
 
     res.status(200).json(documents);
 
@@ -442,9 +441,146 @@ const downloadSharedDocument = async (req, res) => {
   }
 };
 
+// Get Documents By Folder
+const getDocumentsByFolder = async (req, res) => {
+  try {
+    const documents = await Document.find({
+  uploadedBy: req.user.id,
+  folder: req.params.folderId,
+  $or: [
+    { isDeleted: false },
+    { isDeleted: { $exists: false } },
+  ],
+})
+.populate("folder", "name")
+.sort({
+  createdAt: -1,
+});
+    res.status(200).json(documents);
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const getRecycleBin = async (req, res) => {
+  try {
+    const documents = await Document.find({
+      uploadedBy: req.user.id,
+      isDeleted: true,
+    })
+      .populate("folder", "name")
+      .sort({ updatedAt: -1 });
+
+    res.status(200).json(documents);
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const restoreDocument = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    document.isDeleted = false;
+
+    await document.save();
+
+    await logActivity(
+      req.user.id,
+      "Restored Document",
+      document.title
+    );
+
+    res.status(200).json({
+      message: "Document restored successfully",
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const deleteForever = async (req, res) => {
+  try {
+    const document = await Document.findById(req.params.id);
+
+    if (!document) {
+      return res.status(404).json({
+        message: "Document not found",
+      });
+    }
+
+    await Document.findByIdAndDelete(req.params.id);
+
+    await logActivity(
+      req.user.id,
+      "Deleted Forever",
+      document.title
+    );
+
+    res.status(200).json({
+      message: "Document deleted permanently",
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const emptyRecycleBin = async (req, res) => {
+  try {
+    await Document.deleteMany({
+      uploadedBy: req.user.id,
+      isDeleted: true,
+    });
+
+    await logActivity(
+      req.user.id,
+      "Emptied Recycle Bin",
+      "-"
+    );
+
+    res.status(200).json({
+      message: "Recycle Bin emptied successfully",
+    });
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   uploadDocument,
   getDocuments,
+  getDocumentsByFolder,
   deleteDocument,
   updateDocument,
   downloadDocument,
@@ -456,4 +592,8 @@ module.exports = {
   getRecentDocuments,
   generateShareLink,
   getSharedDocument,
+  getRecycleBin,
+  restoreDocument,
+  deleteForever,
+  emptyRecycleBin,
 };
