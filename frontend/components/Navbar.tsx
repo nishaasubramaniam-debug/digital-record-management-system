@@ -3,76 +3,74 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import {
+  LayoutDashboard,
+  FileText,
+  Upload,
+  Folder,
+  Trash2,
+  User,
+  LogOut,
+} from "lucide-react";
+
 export default function Navbar() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    const confirmLogout = window.confirm(
-      "Are you sure you want to logout?"
-    );
-
-    if (!confirmLogout) return;
-
-    // Remove stored data
+  const logout = () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    alert("Logged out successfully!");
-
-    // Redirect to login
     router.push("/login");
   };
 
   return (
-    <nav className="bg-gray-950 border-b border-gray-700 shadow-lg">
+    <nav className="bg-blue-700 text-white shadow-md">
+      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
 
-      <div className="max-w-7xl mx-auto flex justify-between items-center p-5">
-
-        <h1 className="text-3xl font-bold text-blue-400">
-          📂 DRMS
+        <h1 className="text-2xl font-bold">
+          📁 DRMS
         </h1>
 
-        <div className="flex gap-6 items-center">
+        <div className="flex items-center gap-6">
 
-          <Link
-            href="/dashboard"
-            className="text-white hover:text-blue-400 transition font-medium"
-          >
-            🏠 Dashboard
-          </Link>
+          <Link href="/dashboard" className="flex items-center gap-2 hover:text-yellow-300">
+  <LayoutDashboard size={18} />
+  Dashboard
+</Link>
 
-          <Link
-            href="/upload"
-            className="text-white hover:text-green-400 transition font-medium"
-          >
-            📤 Upload
-          </Link>
+<Link href="/documents" className="flex items-center gap-2 hover:text-yellow-300">
+  <FileText size={18} />
+  Documents
+</Link>
 
-          <Link
-            href="/documents"
-            className="text-white hover:text-yellow-400 transition font-medium"
-          >
-            📁 Documents
-          </Link>
+<Link href="/upload" className="flex items-center gap-2 hover:text-yellow-300">
+  <Upload size={18} />
+  Upload
+</Link>
 
-          <Link
-            href="/profile"
-            className="text-white hover:text-purple-400 transition font-medium"
-          >
-            👤 Profile
-          </Link>
+<Link href="/folders" className="flex items-center gap-2 hover:text-yellow-300">
+  <Folder size={18} />
+  Folders
+</Link>
 
-          <button
-            onClick={handleLogout}
-            className="text-white hover:text-red-400 transition font-medium"
-          >
-            🚪 Logout
-          </button>
+<Link href="/recycle-bin" className="flex items-center gap-2 hover:text-yellow-300">
+  <Trash2 size={18} />
+  Recycle Bin
+</Link>
+
+<Link href="/profile" className="flex items-center gap-2 hover:text-yellow-300">
+  <User size={18} />
+  Profile
+</Link>
+
+<button
+  onClick={logout}
+  className="flex items-center gap-2 bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
+>
+  <LogOut size={18} />
+  Logout
+</button>
 
         </div>
-
       </div>
-
     </nav>
   );
 }

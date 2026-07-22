@@ -20,6 +20,7 @@ const {
   getDashboardStats,
   getStorageUsage,
   getRecentDocuments,
+  getMonthlyUploads,
   generateShareLink,
   getSharedDocument,
   getDocumentsByFolder,
@@ -52,6 +53,12 @@ router.get("/storage",
 );
 
 router.get("/recent", auth, getRecentDocuments);
+
+router.get(
+  "/monthly-uploads",
+  auth,
+  getMonthlyUploads
+);
 
 router.get(
   "/folder/:folderId",

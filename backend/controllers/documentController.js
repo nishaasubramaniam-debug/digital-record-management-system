@@ -577,6 +577,62 @@ const emptyRecycleBin = async (req, res) => {
   }
 };
 
+const getMonthlyUploads = async (req, res) => {  try {
+    const userId = req.user.id;
+
+    const monthlyUploads = await Document.aggregate([
+      {
+        $match: {
+          uploadedBy: req.user._id,
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          uploads: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          _id: 1,
+        },
+      },
+    ]);
+
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    const result = months.map((month, index) => {
+      const found = monthlyUploads.find(
+        (m) => m._id === index + 1
+      );
+
+      return {
+        month,
+        uploads: found ? found.uploads : 0,
+      };
+    });
+
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   uploadDocument,
   getDocuments,
@@ -590,6 +646,7 @@ module.exports = {
   getDashboardStats,
   getStorageUsage,
   getRecentDocuments,
+  getMonthlyUploads,   
   generateShareLink,
   getSharedDocument,
   getRecycleBin,

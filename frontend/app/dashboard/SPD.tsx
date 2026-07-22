@@ -2,18 +2,16 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "../../components/Navbar";
 import ProtectedRoute from "../../components/ProtectedRoute";
+import DashboardCard from "../../components/DashboardCard";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import DashboardChart from "../../components/DashboardChart";
 
 import {
   FileText,
   Folder,
   HardDrive,
 } from "lucide-react";
-import DashboardCard from "../../components/DashboardCard";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -32,7 +30,6 @@ export default function Dashboard() {
   total: 100 * 1024 * 1024,
 });
   const [recentDocuments, setRecentDocuments] = useState<any[]>([]);
-  const [monthlyUploads, setMonthlyUploads] = useState([]);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -61,14 +58,7 @@ export default function Dashboard() {
       },
     };
 
-const [
-  statsRes,
-  docsRes,
-  activityRes,
-  storageRes,
-  recentRes,
-  monthlyRes,
-] = await Promise.all([  
+const [statsRes, docsRes, activityRes, storageRes, recentRes,] = await Promise.all([
   axios.get("http://localhost:5000/api/documents/stats", {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -98,11 +88,6 @@ const [
       Authorization: `Bearer ${token}`,
     },
   }),
-  axios.get("http://localhost:5000/api/documents/monthly-uploads", {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-}),
 ]);
 
 setStats(statsRes.data);
@@ -110,8 +95,6 @@ setDocuments(docsRes.data.slice(0, 5));
 setActivities(activityRes.data);
 setStorage(storageRes.data);
 setRecentDocuments(recentRes.data);
-setMonthlyUploads(monthlyRes.data);
-console.log("Monthly Uploads:", monthlyRes.data);
 
     console.log("Stats:", statsRes.data);
     console.log("Documents:", docsRes.data);
@@ -127,8 +110,6 @@ console.log("Monthly Uploads:", monthlyRes.data);
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gray-900">
-
-        <Navbar />
 
         <div className="max-w-7xl mx-auto p-8">
 
@@ -155,7 +136,9 @@ console.log("Monthly Uploads:", monthlyRes.data);
 
           </div>
 
-            {/* Statistics */}
+          {/* Statistics */}
+
+          {/* Statistics */}
 
 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
@@ -182,7 +165,53 @@ console.log("Monthly Uploads:", monthlyRes.data);
 
 </div>
 
-{/* Quick Actions */}
+            <div className="bg-gradient-to-r from-purple-600 to-purple-800 rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300">
+  <div className="flex justify-between items-center">
+    <div>
+      <p className="text-purple-100 text-lg">📂 Categories</p>
+      <h2 className="text-4xl font-bold text-white mt-2">
+        {stats.totalCategories}
+      </h2>
+    </div>
+
+    <div className="text-6xl">
+      🗂️
+    </div>
+  </div>
+</div>
+
+            <div className="bg-purple-700 rounded-xl p-6 shadow-lg">
+              <h2 className="text-white text-lg">
+                👤 Status
+              </h2>
+
+              <p className="text-3xl text-white font-bold mt-6">
+                Active
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-r from-green-600 to-green-800 rounded-2xl p-6 shadow-xl hover:scale-105 transition-all duration-300">
+  <div className="flex justify-between items-center">
+    <div>
+      <p className="text-green-100 text-lg">
+        💾 Storage Used
+      </p>
+
+      <h2 className="text-4xl font-bold text-white mt-2">
+        {(storage.used / 1024 / 1024).toFixed(2)} MB
+      </h2>
+    </div>
+
+    <div className="text-6xl">
+      💽
+    </div>
+  </div>
+</div>
+
+          </div>
+
+        
+          {/* Quick Actions */}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
@@ -222,16 +251,12 @@ console.log("Monthly Uploads:", monthlyRes.data);
 
   <div className="w-full bg-gray-700 rounded-full h-5">
     <div
-  className="bg-green-500 h-5 rounded-full transition-all duration-500"
-  style={{
-    width: `${Math.max(
-      (storage.used / storage.total) * 100,
-      2
-    )}%`,
-  }}
-/>
+      className="bg-green-500 h-5 rounded-full"
+      style={{
+        width: `${(storage.used / storage.total) * 100}%`,
+      }}
+    />
   </div>
-
 
   <p className="text-gray-300 mt-4">
     {(storage.used / 1024 / 1024).toFixed(2)} MB used of{" "}
@@ -242,9 +267,6 @@ console.log("Monthly Uploads:", monthlyRes.data);
     {((storage.used / storage.total) * 100).toFixed(1)}% Used
   </p>
 </div>
-
-<DashboardChart data={monthlyUploads} />
-
 
           {/* Recent Documents */}
 

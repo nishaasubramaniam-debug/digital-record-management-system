@@ -1,99 +1,42 @@
 "use client";
 
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
   Tooltip,
-  Legend,
-} from "chart.js";
+  CartesianGrid,
+} from "recharts";
 
-import { Bar } from "react-chartjs-2";
-
-// Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-// Props Interface
-interface DashboardChartProps {
-  totalDocuments: number;
-  totalCategories: number;
+interface Props {
+  data: {
+    month: string;
+    uploads: number;
+  }[];
 }
 
-export default function DashboardChart({
-  totalDocuments,
-  totalCategories,
-}: DashboardChartProps) {
-
-  const data = {
-    labels: ["Documents", "Categories"],
-    datasets: [
-      {
-        label: "DRMS Analytics",
-        data: [totalDocuments, totalCategories],
-        backgroundColor: [
-          "#2563EB", // Blue
-          "#16A34A", // Green
-        ],
-        borderRadius: 10,
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-
-    plugins: {
-      legend: {
-        labels: {
-          color: "white",
-        },
-      },
-
-      title: {
-        display: true,
-        text: "📊 Digital Record Statistics",
-        color: "white",
-        font: {
-          size: 20,
-        },
-      },
-    },
-
-    scales: {
-      x: {
-        ticks: {
-          color: "white",
-        },
-        grid: {
-          color: "#374151",
-        },
-      },
-
-      y: {
-        beginAtZero: true,
-        ticks: {
-          color: "white",
-          precision: 0,
-        },
-        grid: {
-          color: "#374151",
-        },
-      },
-    },
-  };
-
+export default function DashboardChart({ data }: Props) {
   return (
     <div className="bg-gray-800 rounded-2xl shadow-xl p-6 mt-10">
-      <Bar data={data} options={options} />
+      <h2 className="text-2xl font-bold text-white mb-6">
+        📈 Monthly Uploads
+      </h2>
+
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="month" />
+          <YAxis />
+          <Tooltip />
+          <Bar
+            dataKey="uploads"
+            fill="#3B82F6"
+            radius={[8, 8, 0, 0]}
+          />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 }
