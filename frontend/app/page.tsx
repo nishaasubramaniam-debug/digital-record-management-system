@@ -1,4 +1,10 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 export default function Home() {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-8">
       <main className="bg-white shadow-lg rounded-xl p-10 text-center max-w-2xl">
@@ -11,11 +17,17 @@ export default function Home() {
         </p>
 
         <div className="flex gap-4 justify-center">
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+          <button
+            onClick={() => router.push("/login")}
+            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+          >
             Login
           </button>
 
-          <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700">
+          <button
+            onClick={() => router.push("/register")}
+            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700"
+          >
             Register
           </button>
         </div>
