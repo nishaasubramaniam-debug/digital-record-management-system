@@ -1,5 +1,5 @@
 const logActivity = require("../utils/activityLogger");
-const Document = require("../models/Document");
+const Document = require("../models/document");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
