@@ -83,7 +83,7 @@ digital-record-management-system/
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_GITHUB_USERNAME/digital-record-management-system.git
+git clone https://github.com/nishaasubramaniam-debug/digital-record-management-system.git
 ```
 
 Navigate into the project:
