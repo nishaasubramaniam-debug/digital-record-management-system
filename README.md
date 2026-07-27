@@ -161,7 +161,7 @@ screenshots/
 
 ## 🌐 Deployment
 
-**Frontend:** Vercel
+Frontend:https://digital-record-management-system.vercel.app
 
 **Backend:** Localhost (can be deployed to Render or Railway for production)
 
