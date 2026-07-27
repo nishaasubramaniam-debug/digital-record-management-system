@@ -1,16 +1,24 @@
-# 📁 Digital Record Management System (DRMS)
+📁 Digital Record Management System (DRMS)
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react)
+![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=json-web-tokens)
 
 A full-stack web application that enables users to securely upload, organize, search, manage, and share digital documents through a centralized platform.
 
 ---
 
-## 📌 Project Overview
+📌 Project Overview
 
 The **Digital Record Management System (DRMS)** is designed to simplify document management by providing a secure platform where users can upload, organize, search, and manage digital records efficiently. The application includes user authentication, document upload, folder management, favorites, recycle bin, and document sharing functionalities.
 
 ---
 
-## 🚀 Features
+🚀 Features
 
 - 👤 User Registration & Login
 - 🔐 JWT Authentication
@@ -26,16 +34,16 @@ The **Digital Record Management System (DRMS)** is designed to simplify document
 
 ---
 
-## 🛠️ Technologies Used
+🛠️ Technologies Used
 
-### Frontend
+Frontend
 - Next.js
 - React.js
 - Tailwind CSS
 - Axios
 - React Toastify
 
-### Backend
+Backend
 - Node.js
 - Express.js
 - MongoDB Atlas
@@ -43,7 +51,7 @@ The **Digital Record Management System (DRMS)** is designed to simplify document
 - JWT Authentication
 - Multer
 
-### Tools
+Tools
 - Git
 - GitHub
 - Visual Studio Code
@@ -51,9 +59,8 @@ The **Digital Record Management System (DRMS)** is designed to simplify document
 
 ---
 
-## 📂 Project Structure
+📂 Project Structure
 
-```text
 digital-record-management-system/
 │
 ├── frontend/
@@ -74,13 +81,12 @@ digital-record-management-system/
 │   └── package.json
 │
 └── README.md
-```
 
 ---
 
-## ⚙️ Installation
+⚙️ Installation
 
-### Clone the Repository
+Clone the Repository
 
 ```bash
 git clone https://github.com/nishaasubramaniam-debug/digital-record-management-system.git
@@ -119,7 +125,7 @@ npm start
 
 ---
 
-## Frontend Setup
+Frontend Setup
 
 Install dependencies:
 
@@ -135,39 +141,43 @@ npm run dev
 ```
 
 Open:
-
-```text
 http://localhost:3000
-```
 
 ---
 
-## 📷 Project Screenshots
+📷 Project Screenshots
 
-> Add screenshots after uploading them to your GitHub repository.
+🏠 Home Page
 
-Example:
+![Home Page](screenshots/home.png)
 
-```text
-screenshots/
-├── home.png<img width="1901" height="976" alt="image" src="https://github.com/user-attachments/assets/92744d4b-afd1-436c-91d9-581bc062291f" />
-├── login.png<img width="1917" height="965" alt="image" src="https://github.com/user-attachments/assets/c3eff9c3-df9a-420b-b9b3-f14cb7b425c4" />
-├── dashboard.png<img width="1917" height="971" alt="image" src="https://github.com/user-attachments/assets/7168d615-4712-40f5-b36a-ded8508b5fdf" />
-├── upload.png<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/b580c42e-4ec3-4023-a65b-9e1a578ee2c5" />
-└── documents.png<img width="1917" height="972" alt="image" src="https://github.com/user-attachments/assets/36bd088d-273b-46b3-95da-898b07bb7de3" />
-```
+🔐 Login Page
+
+![Login Page](screenshots/login.png)
+
+📊 Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+📤 Upload Document
+
+![Upload Document](screenshots/upload.png)
+
+📂 Documents Page
+
+![Documents Page](screenshots/documents.png)
 
 ---
 
-## 🌐 Deployment
+🌐 Deployment
 
 Frontend:https://digital-record-management-system.vercel.app
 
-**Backend:** Localhost (can be deployed to Render or Railway for production)
+Backend: Localhost (can be deployed to Render or Railway for production)
 
 ---
 
-## 🔐 Authentication
+🔐 Authentication
 
 - Secure User Registration
 - JWT-based Login Authentication
@@ -176,7 +186,7 @@ Frontend:https://digital-record-management-system.vercel.app
 
 ---
 
-## 📚 Future Enhancements
+📚 Future Enhancements
 
 - Deploy Backend to Render
 - Password Reset
@@ -189,16 +199,13 @@ Frontend:https://digital-record-management-system.vercel.app
 
 ---
 
-## 👩‍💻 Developed By
+👩‍💻 Developed By
 
 **Nishaa Subramaniam**
-
-B.Tech – Information Technology
-
 GitHub: https://github.com/nishaasubramaniam-debug
 
 ---
 
-## 📄 License
+📄 License
 
 This project is developed for educational and learning purposes.
