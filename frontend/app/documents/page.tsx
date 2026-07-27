@@ -62,7 +62,7 @@ export default function Documents() {
     const token = localStorage.getItem("token");
 
     const response = await axios.get(
-      "http://localhost:5000/api/folders",
+      "https://drms-backend-7azn.onrender.com/api/folders",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -87,8 +87,8 @@ export default function Documents() {
     const token = localStorage.getItem("token");
 
     const url = folderId
-      ? `http://localhost:5000/api/documents/folder/${folderId}`
-      : "http://localhost:5000/api/documents";
+      ? `https://drms-backend-7azn.onrender.com/api/documents/folder/${folderId}`
+      : `https://drms-backend-7azn.onrender.com/api/documents`;
 
     const response = await axios.get(url, {
       headers: {
@@ -113,7 +113,7 @@ export default function Documents() {
 
     try {
       const response = await axios.delete(
-  `http://localhost:5000/api/documents/${id}`,
+  `https://drms-backend-7azn.onrender.com/api/documents/${id}`,
   {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -133,7 +133,7 @@ fetchDocuments(selectedFolder);
   const updateDocument = async () => {
   try {
     await axios.put(
-      `http://localhost:5000/api/documents/${editingDoc._id}`,
+      `https://drms-backend-7azn.onrender.com/api/documents/${editingDoc._id}`,
       {
         title: editTitle,
         category: editCategory,
@@ -159,7 +159,7 @@ fetchDocuments(selectedFolder);
    const toggleFavorite = async (id: string) => {
   try {
     await axios.put(
-      `http://localhost:5000/api/documents/favorite/${id}`,
+      `https://drms-backend-7azn.onrender.com/api/documents/favorite/${id}`,
       {},
       {
         headers: {
@@ -179,7 +179,7 @@ fetchDocuments(selectedFolder);
 const shareDocument = async (id: string) => {
   try {
     const response = await axios.get(
-      `http://localhost:5000/api/documents/share/${id}`,
+      `https://drms-backend-7azn.onrender.com/api/documents/share/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -421,7 +421,7 @@ const getCategoryColor = (category: string) => {
 
               {filteredDocuments.map((doc) => {
 
-                const fileUrl = `http://localhost:5000/uploads/${encodeURIComponent(
+                const fileUrl = `https://drms-backend-7azn.onrender.com/uploads/${encodeURIComponent(
                   doc.fileName
                 )}`;
 
@@ -511,7 +511,7 @@ const getCategoryColor = (category: string) => {
                       <button
   onClick={() =>
     window.open(
-      `http://localhost:5000/api/documents/download/${doc._id}?token=${localStorage.getItem("token")}`,
+      `https://drms-backend-7azn.onrender.com/api/documents/download/${doc._id}?token=${localStorage.getItem("token")}`,
       "_blank"
     )
   }

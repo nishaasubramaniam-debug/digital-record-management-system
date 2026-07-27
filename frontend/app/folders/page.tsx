@@ -18,7 +18,7 @@ const fetchFolders = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.get(
-      "http://localhost:5000/api/folders",
+      "https://drms-backend-7azn.onrender.com/api/folders",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -54,7 +54,7 @@ const createFolder = async () => {
     const token = localStorage.getItem("token");
 
     await axios.post(
-      "http://localhost:5000/api/folders",
+      "https://drms-backend-7azn.onrender.com/api/folders",
       {
         name: folderName,
       },
@@ -82,7 +82,7 @@ const createFolder = async () => {
     const token = localStorage.getItem("token");
 
     await axios.delete(
-      `http://localhost:5000/api/folders/${id}`,
+      `https://drms-backend-7azn.onrender.com/api/folders/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,7 +109,7 @@ const createFolder = async () => {
     const token = localStorage.getItem("token");
 
     await axios.put(
-      `http://localhost:5000/api/folders/${id}`,
+      `https://drms-backend-7azn.onrender.com/api/folders/${id}`,
       {
         name: newName,
       },

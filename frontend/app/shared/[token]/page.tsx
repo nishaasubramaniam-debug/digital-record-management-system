@@ -20,7 +20,7 @@ export default function SharedDocument() {
   const fetchDocument = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/documents/shared/${token}`
+        `https://drms-backend-7azn.onrender.com/api/documents/shared/${token}`
       );
 
       setDocument(response.data);
@@ -66,7 +66,7 @@ export default function SharedDocument() {
         </p>
 
         <a
-        href={`http://localhost:5000/api/documents/shared/download/${token}`}        
+        href={`https://drms-backend-7azn.onrender.com/api/documents/shared/download/${token}`}        
         className="block mt-8 bg-blue-600 hover:bg-blue-700 text-center text-white py-3 rounded-lg"
         >
           ⬇ Download Document

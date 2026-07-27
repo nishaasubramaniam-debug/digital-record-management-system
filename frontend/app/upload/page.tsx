@@ -33,7 +33,7 @@ export default function UploadDocument() {
     formData.append("file", file);
 
     const response = await axios.post(
-      "http://localhost:5000/api/documents/upload",
+      "https://drms-backend-7azn.onrender.com/api/documents/upload",
       formData,
       {
         headers: {
@@ -86,7 +86,7 @@ const fetchFolders = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.get(
-      "http://localhost:5000/api/folders",
+      "https://drms-backend-7azn.onrender.com/api/folders",
       {
         headers: {
           Authorization: `Bearer ${token}`,

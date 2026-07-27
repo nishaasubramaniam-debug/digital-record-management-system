@@ -30,7 +30,7 @@ export default function Profile() {
 const handleUpdate = async () => {
   try {
     const response = await axios.put(
-      "http://localhost:5000/api/auth/profile",
+      "https://drms-backend-7azn.onrender.com/api/auth/profile",
       {
         name,
         email,

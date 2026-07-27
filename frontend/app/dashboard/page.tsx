@@ -69,36 +69,36 @@ const [
   recentRes,
   monthlyRes,
 ] = await Promise.all([  
-  axios.get("http://localhost:5000/api/documents/stats", {
+  axios.get("https://drms-backend-7azn.onrender.com/api/documents/stats", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }),
 
-  axios.get("http://localhost:5000/api/documents", {
+  axios.get("https://drms-backend-7azn.onrender.com/api/documents", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }),
 
-  axios.get("http://localhost:5000/api/activity", {
+  axios.get("https://drms-backend-7azn.onrender.com/api/activity", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }),
 
-  axios.get("http://localhost:5000/api/documents/storage", {
+  axios.get("https://drms-backend-7azn.onrender.com/api/documents/storage", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }),
  
-  axios.get("http://localhost:5000/api/documents/recent", {
+  axios.get("https://drms-backend-7azn.onrender.com/api/documents/recent", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   }),
-  axios.get("http://localhost:5000/api/documents/monthly-uploads", {
+  axios.get("https://drms-backend-7azn.onrender.com/api/documents/monthly-uploads", {
   headers: {
     Authorization: `Bearer ${token}`,
   },

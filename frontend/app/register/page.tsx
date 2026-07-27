@@ -23,7 +23,7 @@ export default function Register() {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+        "https://drms-backend-7azn.onrender.com/api/auth/register",
         {
           name,
           email,

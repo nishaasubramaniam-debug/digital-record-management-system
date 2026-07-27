@@ -14,7 +14,7 @@ export default function RecycleBinPage() {
       const token = localStorage.getItem("token");
 
       const response = await axios.get(
-        "http://localhost:5000/api/documents/recycle-bin",
+        "https://drms-backend-7azn.onrender.com/api/documents/recycle-bin",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -45,7 +45,7 @@ export default function RecycleBinPage() {
     const token = localStorage.getItem("token");
 
     const response = await axios.put(
-      `http://localhost:5000/api/documents/restore/${id}`,
+      `https://drms-backend-7azn.onrender.com/api/documents/restore/${id}`,
       {},
       {
         headers: {
@@ -71,7 +71,7 @@ const deleteForever = async (id: string) => {
     const token = localStorage.getItem("token");
 
     const response = await axios.delete(
-      `http://localhost:5000/api/documents/delete-forever/${id}`,
+      `https://drms-backend-7azn.onrender.com/api/documents/delete-forever/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -96,7 +96,7 @@ const emptyRecycleBin = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.delete(
-      "http://localhost:5000/api/documents/empty-recycle-bin",
+      "https://drms-backend-7azn.onrender.com/api/documents/empty-recycle-bin",
       {
         headers: {
           Authorization: `Bearer ${token}`,
